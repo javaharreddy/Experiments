@@ -16,6 +16,16 @@ pipeline {
                 script {
                     def changedFile = bat(returnStdout: true, script: 'git diff --name-only origin/main HEAD | findstr /R "^Python/"').trim()
 
+
+                     // Debugging output
+                        echo "Git Diff Output for Python Changes:"
+                        echo "=================================="
+                        echo changedFile
+                        echo "=================================="
+
+
+
+                        
                     if (changedFile) {
                         echo "Changed Python file detected: $changedFile"
                         
@@ -37,6 +47,16 @@ pipeline {
                 script {
                     def changedFile = bat(returnStdout: true, script: 'git diff --name-only origin/main HEAD | findstr /R "^Java/"').trim()
 
+
+
+                     // Debugging output
+                        echo "Git Diff Output for Python Changes:"
+                        echo "=================================="
+                        echo changedFile
+                        echo "=================================="
+
+
+
                     if (changedFile) {
                         echo "Changed Java file detected: $changedFile"
                         
@@ -57,6 +77,15 @@ pipeline {
             steps {
                 script {
                     def changedFile = bat(returnStdout: true, script: 'git diff --name-only origin/main HEAD | findstr /R "^CPP/"').trim()
+
+
+                         // Debugging output
+                        echo "Git Diff Output for Python Changes:"
+                        echo "=================================="
+                        echo changedFile
+                        echo "=================================="
+
+
 
                     if (changedFile) {
                         echo "Changed CPP file detected: $changedFile"
