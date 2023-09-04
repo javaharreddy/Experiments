@@ -4,13 +4,14 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                
+
                 checkout scm
             }
         }
 
         stage('Python Changes') {
             when {
+
                 changeset '**/Python/**'
             }
             steps {
@@ -23,14 +24,14 @@ pipeline {
                     script {
                         def changedFile = sh(returnStdout: true, script: 'git diff --name-only origin/main HEAD | grep "^Python/"').trim()
                         
-                        
+
                         if (changedFile) {
                             echo "Changed Python file detected: $changedFile"
                             bat "curl -X POST -F 'file=@$changedFile' http://localhost:8080/upload"
                         } else {
                             echo 'No changed Python file detected'
                         }
-
+                    }
                 }
             }
         }
@@ -39,6 +40,7 @@ pipeline {
             when {
                 changeset '**/Java/**'
             }
+
             steps {
 
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'Java/']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'your-credentials-id', url: 'https://github.com/vemulasaikrishna03/Experiments.git']]])
@@ -50,48 +52,53 @@ pipeline {
                         def changedFile = sh(returnStdout: true, script: 'git diff --name-only origin/main HEAD | grep "^Java/"').trim()
                         
                         if (changedFile) {
+
                             echo "Changed Java file detected: $changedFile"
-                            
-                            /
+
+
                             bat "curl -X POST -F 'file=@$changedFile' http://localhost:8080/upload"
+
                         } else {
                             echo 'No changed Java file detected'
                         }
                     }
-
-                  
-                    
                 }
+
             }
         }
+
 
         stage('C++ Changes') {
             when {
                 changeset '**/CPP/**'
             }
             steps {
-              
+
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'CPP/']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'your-credentials-id', url: 'https://github.com/vemulasaikrishna03/Experiments.git']]])
 
-              
+
                 dir('CPP') {
 
                     script {
+
                         def changedFile = sh(returnStdout: true, script: 'git diff --name-only origin/main HEAD | grep "^CPP/"').trim()
                         
-                        
-                        if (changedFile) {
-                            echo "Changed CPP file detected: $changedFile"
-                            
-                            
-                            bat "curl -X POST -F 'file=@$changedFile' http://localhost:8080/upload"
-                        } else {
-                            echo 'No changed CPP file detected'
-                        }
 
+                        if (changedFile) {
+
+                            echo "Changed CPP file detected: $changedFile"
+
+
+                            bat "curl -X POST -F 'file=@$changedFile' http://localhost:8080/upload"
+
+                        } else {
+
+                            echo 'No changed CPP file detected'
+                            
+                        }
+                    }
                 }
             }
         }
     }
 }
-    
