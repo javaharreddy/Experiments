@@ -39,7 +39,7 @@ pipeline {
 def getChangedFiles(directory) {
     try {
         def gitCommand = "git diff --name-only origin/main HEAD | findstr /R \"^${directory}\""
-        def result = sh(script: gitCommand, returnStatus: true, returnStdout: true).trim()
+        def result = bat(script: gitCommand, returnStatus: true, returnStdout: true).trim()
         return result.tokenize('\n')
     } catch (Exception ex) {
         return null
