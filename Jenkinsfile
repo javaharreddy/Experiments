@@ -4,7 +4,6 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-               
                 checkout scm
             }
         }
@@ -14,14 +13,18 @@ pipeline {
                 changeset '**/Python/**'
             }
             steps {
-              
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'Python/']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'your-credentials-id', url: 'https://github.com/vemulasaikrishna03/Experiments.git']]])
+                script {
+                    def changedFile = bat(returnStdout: true, script: 'git diff --name-only origin/main HEAD | findstr /R "^Python/"').trim()
 
-           
-                dir('Python') {
-                  
-                    echo 'Python code changes detected'
-                    
+                    if (changedFile) {
+                        echo "Changed Python file detected: $changedFile"
+                        
+                        def fileContent = readFile(changedFile)
+
+                        sendHttpRequest(changedFile, fileContent)
+                    } else {
+                        echo 'No changed Python file detected'
+                    }
                 }
             }
         }
@@ -31,14 +34,18 @@ pipeline {
                 changeset '**/Java/**'
             }
             steps {
-             
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'Java/']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'your-credentials-id', url: 'https://github.com/vemulasaikrishna03/Experiments.git']]])
+                script {
+                    def changedFile = bat(returnStdout: true, script: 'git diff --name-only origin/main HEAD | findstr /R "^Java/"').trim()
 
-             
-                dir('Java') {
-                  
-                    echo 'Java code changes detected'
-                    
+                    if (changedFile) {
+                        echo "Changed Java file detected: $changedFile"
+                        
+                        def fileContent = readFile(changedFile)
+
+                        sendHttpRequest(changedFile, fileContent)
+                    } else {
+                        echo 'No changed Java file detected'
+                    }
                 }
             }
         }
@@ -48,15 +55,42 @@ pipeline {
                 changeset '**/CPP/**'
             }
             steps {
-               
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'CPP/']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'your-credentials-id', url: 'https://github.com/vemulasaikrishna03/Experiments.git']]])
+                script {
+                    def changedFile = bat(returnStdout: true, script: 'git diff --name-only origin/main HEAD | findstr /R "^CPP/"').trim()
 
-          
-                dir('CPP') {
-                    echo 'C++ code changes detected'
-                   
+                    if (changedFile) {
+                        echo "Changed CPP file detected: $changedFile"
+                        
+                        def fileContent = readFile(changedFile)
+
+                        sendHttpRequest(changedFile, fileContent)
+                    } else {
+                        echo 'No changed CPP file detected'
+                    }
                 }
             }
         }
+    }
+}
+
+def sendHttpRequest(changedFile, fileContent) {
+    def controllerUrl = 'http://localhost:8080/upload'
+    
+    def response = httpRequest(
+        contentType: 'APPLICATION_FORM',
+        httpMode: 'POST',
+        requestBody: [
+            file: [
+                file: fileContent,
+                filename: changedFile
+            ]
+        ],
+        url: controllerUrl
+    )
+    
+    if (response.status == 200) {
+        echo "File uploaded successfully!"
+    } else {
+        error "Error uploading the file: HTTP Status ${response.status}"
     }
 }
