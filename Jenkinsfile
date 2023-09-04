@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Check out the code from the Git repository
+                
                 checkout scm
             }
         }
@@ -14,14 +14,23 @@ pipeline {
                 changeset '**/Python/**'
             }
             steps {
-                // Check out the Python code
+
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'Python/']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'your-credentials-id', url: 'https://github.com/vemulasaikrishna03/Experiments.git']]])
 
-                // Navigate to the Python directory
+
                 dir('Python') {
-                    // Add steps for Python code changes
-                    echo 'Python code changes detected'
-                    // You can run Python tests or other actions here
+
+                    script {
+                        def changedFile = sh(returnStdout: true, script: 'git diff --name-only origin/main HEAD | grep "^Python/"').trim()
+                        
+                        
+                        if (changedFile) {
+                            echo "Changed Python file detected: $changedFile"
+                            bat "curl -X POST -F 'file=@$changedFile' http://localhost:8080/upload"
+                        } else {
+                            echo 'No changed Python file detected'
+                        }
+
                 }
             }
         }
@@ -31,14 +40,27 @@ pipeline {
                 changeset '**/Java/**'
             }
             steps {
-                // Check out the Java code
+
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'Java/']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'your-credentials-id', url: 'https://github.com/vemulasaikrishna03/Experiments.git']]])
 
-                // Navigate to the Java directory
+
                 dir('Java') {
-                    // Add steps for Java code changes
-                    echo 'Java code changes detected'
-                    // You can run Java builds, tests, etc., here
+
+                    script {
+                        def changedFile = sh(returnStdout: true, script: 'git diff --name-only origin/main HEAD | grep "^Java/"').trim()
+                        
+                        if (changedFile) {
+                            echo "Changed Java file detected: $changedFile"
+                            
+                            /
+                            bat "curl -X POST -F 'file=@$changedFile' http://localhost:8080/upload"
+                        } else {
+                            echo 'No changed Java file detected'
+                        }
+                    }
+
+                  
+                    
                 }
             }
         }
@@ -48,16 +70,28 @@ pipeline {
                 changeset '**/CPP/**'
             }
             steps {
-                // Check out the C++ code
+              
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'CPP/']]]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'your-credentials-id', url: 'https://github.com/vemulasaikrishna03/Experiments.git']]])
 
-                // Navigate to the C++ directory
+              
                 dir('CPP') {
-                    // Add steps for C++ code changes
-                    echo 'C++ code changes detected'
-                    // You can compile and test C++ code here
+
+                    script {
+                        def changedFile = sh(returnStdout: true, script: 'git diff --name-only origin/main HEAD | grep "^CPP/"').trim()
+                        
+                        
+                        if (changedFile) {
+                            echo "Changed CPP file detected: $changedFile"
+                            
+                            
+                            bat "curl -X POST -F 'file=@$changedFile' http://localhost:8080/upload"
+                        } else {
+                            echo 'No changed CPP file detected'
+                        }
+
                 }
             }
         }
     }
 }
+    
