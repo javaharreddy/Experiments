@@ -39,7 +39,7 @@ pipeline {
 def getChangedFiles(directory) {
     try {
         def gitCommand = "git diff --name-only origin/main HEAD | findstr /R \"^${directory}\""
-        def result = sh(script: gitCommand, returnStatus: true, returnStdout: true).trim()
+        def result = bat(script: gitCommand, returnStatus: true, returnStdout: true).trim()
         
         if (result) {
             return result.tokenize('\n')
@@ -50,7 +50,7 @@ def getChangedFiles(directory) {
 
             for (subdir in subdirectories) {
                 def subdirPath = "${directory}${subdir}/"
-                def subResult = sh(script: "git diff --name-only origin/main HEAD | findstr /R \"^${subdirPath}\"", returnStatus: true, returnStdout: true).trim()
+                def subResult = bat(script: "git diff --name-only origin/main HEAD | findstr /R \"^${subdirPath}\"", returnStatus: true, returnStdout: true).trim()
                 if (subResult) {
                     subdirectoryChanges[subdirPath] = subResult.tokenize('\n')
                 }
