@@ -21,7 +21,7 @@ pipeline {
                         
                         if (changedFile) {
                             echo "Changed Python file detected: $changedFile"
-                            bat "curl -X POST -F 'file=@$changedFile' http://localhost:8080/upload"
+                            //bat "curl -X POST -F 'file=@$changedFile' http://localhost:8080/upload"
                         } else {
                             echo 'No changed Python file detected'
                         }
@@ -43,7 +43,7 @@ pipeline {
                         
                         if (changedFile) {
                             echo "Changed Java file detected: $changedFile"
-                            bat "curl -X POST -F 'file=@$changedFile' http://localhost:8080/upload"
+                            //bat "curl -X POST -F 'file=@$changedFile' http://localhost:8080/upload"
                         } else {
                             echo 'No changed Java file detected'
                         }
@@ -65,7 +65,7 @@ pipeline {
                         
                         if (changedFile) {
                             echo "Changed CPP file detected: $changedFile"
-                            bat "curl -X POST -F 'file=@$changedFile' http://localhost:8080/upload"
+                           // bat "curl -X POST -F 'file=@$changedFile' http://localhost:8080/upload"
                         } else {
                             echo 'No changed CPP file detected'
                         }
