@@ -22,7 +22,7 @@ pipeline {
                 dir('Python') {
 
                     script {
-                        def changedFile = bat(returnStdout: true, script: 'git diff --name-only origin/main HEAD | grep "^Python/"').trim()
+                        def changedFile = bat(returnStdout: true, script: 'git diff --name-only origin/main HEAD |findstr /R  "^Python/"').trim()
                         
 
                         if (changedFile) {
@@ -49,7 +49,7 @@ pipeline {
                 dir('Java') {
 
                     script {
-                        def changedFile = bat(returnStdout: true, script: 'git diff --name-only origin/main HEAD | grep "^Java/"').trim()
+                        def changedFile = bat(returnStdout: true, script: 'git diff --name-only origin/main HEAD | findstr /R "^Java/"').trim()
                         
                         if (changedFile) {
 
@@ -81,7 +81,7 @@ pipeline {
 
                     script {
 
-                        def changedFile = bat(returnStdout: true, script: 'git diff --name-only origin/main HEAD | grep "^CPP/"').trim()
+                        def changedFile = bat(returnStdout: true, script: 'git diff --name-only origin/main HEAD | findstr /R  "^CPP/"').trim()
                         
 
                         if (changedFile) {
