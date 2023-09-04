@@ -22,7 +22,25 @@ pipeline {
                 dir('Python') {
 
                     script {
-                        def changedFile = bat(returnStdout: true, script: 'git diff --name-only origin/main HEAD |findstr /R  "^Python/"').trim()
+
+                        def maxRetries = 3
+                        def retryCount = 0
+
+                                while (retryCount < maxRetries) {
+                                    def result = bat(script: "curl -X POST -F 'file=@$changedFile' --max-time 60 http://localhost:8080/upload", returnStatus: true)
+                                        if (result == 0) {
+            
+                                                     break
+                                                } else {
+            
+                                                 retryCount++
+                                                    sleep(time: 10, unit: 'SECONDS') 
+                                                }
+                                }
+
+                                    if (retryCount == maxRetries) {
+                                        error('HTTP request failed after multiple retries')
+                                    }
                         
 
                         if (changedFile) {
@@ -49,7 +67,26 @@ pipeline {
                 dir('Java') {
 
                     script {
-                        def changedFile = bat(returnStdout: true, script: 'git diff --name-only origin/main HEAD | findstr /R "^Java/"').trim()
+
+                        def maxRetries = 3
+
+                        def retryCount = 0
+
+                        while (retryCount < maxRetries) {
+                                def result = bat(script: "curl -X POST -F 'file=@$changedFile' --max-time 60 http://localhost:8080/upload", returnStatus: true)
+                                if (result == 0) {
+                                
+                                    break
+                                } else {
+                                
+                                    retryCount++
+                                    sleep(time: 10, unit: 'SECONDS') 
+                                }
+                            }
+
+                            if (retryCount == maxRetries) {
+                                error('HTTP request failed after multiple retries')
+                        }
                         
                         if (changedFile) {
 
@@ -80,9 +117,25 @@ pipeline {
                 dir('CPP') {
 
                     script {
+                        def maxRetries = 3
+                        def retryCount = 0
 
-                        def changedFile = bat(returnStdout: true, script: 'git diff --name-only origin/main HEAD | findstr /R  "^CPP/"').trim()
+
+                        while (retryCount < maxRetries) {
+                        def result = bat(script: "curl -X POST -F 'file=@$changedFile' --max-time 60 http://localhost:8080/upload", returnStatus: true)
+                        if (result == 0) {
                         
+                            break
+                        } else {
+                        
+                            retryCount++
+                            sleep(time: 10, unit: 'SECONDS') 
+                        }
+                    }
+
+                            if (retryCount == maxRetries) {
+                                error('HTTP request failed after multiple retries')
+                            }
 
                         if (changedFile) {
 
@@ -102,3 +155,5 @@ pipeline {
         }
     }
 }
+
+
