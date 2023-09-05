@@ -24,6 +24,13 @@ pipeline {
                     if (changedFiles) {
                         echo "Python code changes detected in the following files:"
                         echo changedFiles.join('\n')
+
+                        for (def file : changedFiles) {
+                            echo "Content of $file:"
+                            echo readFile(file)
+                        }
+
+                        
                     } else {
                         echo "Python code changes detected, but no specific files found."
                     }
