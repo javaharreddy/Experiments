@@ -28,8 +28,8 @@ pipeline {
 
                         for (def file : changedFiles) {
 
-
                             if (file.contains("/Test")) {
+                                bat "python $file"
                                 echo "Content of $file:"
                                 echo readFile(file)
                             }
