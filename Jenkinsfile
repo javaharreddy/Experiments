@@ -104,19 +104,20 @@ List<String> getChangedFiles(String directory) {
 }
 @NonCPS
 String isNewOrModified(String file, String directory) {
-    def gitCommand = "git log --name-status -n 1 -- \"$file\""
-    def commandOutput = bat(script: "cd \"$directory\" && $gitCommand", returnStdout: true).trim()
-
-    // Split the command output into lines
-    def lines = commandOutput.readLines()
-
-    // Check for "A" (Added) or "M" (Modified) status in the first line
-    if (lines.size() > 0 && lines[0].endsWith("\t$file")) {
-        return "2" // New File
-    } else {
-        return "1" // Modified File
+    // Define a variable to track the file status
+    def fileStatus = "Modified File"
+    
+    // Use the 'checkout' step to retrieve the file's history
+    checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'PathRestriction', excludedRegions: '', includedRegions: file]], submoduleCfg: [], userRemoteConfigs: [[url: "$directory"]]])
+    
+    // Check if the file has any change in the 'main' branch
+    if (fileExists(file)) {
+        fileStatus = "New File"
     }
+    
+    return fileStatus
 }
+
 
 
 
