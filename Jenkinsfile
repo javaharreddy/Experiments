@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout your Git repository
+                
                 checkout scm
             }
         }
@@ -15,10 +15,10 @@ pipeline {
             }
             steps {
                 script {
-                    // Specify the path to the Python directory
+                   
                     def pythonDir = 'Python/'
 
-                    // Get a list of changed files in the Python directory
+                    
                     def changedFiles = getChangedFiles(pythonDir)
 
                     if (changedFiles) {
@@ -37,11 +37,11 @@ pipeline {
                            url: 'http://localhost:8080/upload'
 
                             if (response.status == 200) {
-                                // HTTP request was successful
+                               
                                 echo "HTTP request was successful"
                                 echo "Response: ${response}"
                             } else {
-                                // HTTP request failed
+                                
                                 echo "HTTP request failed with status code: ${response.status}"
                                 echo "Response: ${response}"
                             }
@@ -63,10 +63,10 @@ pipeline {
             }
             steps {
                 script {
-                    // Specify the path to the Java directory
+                  
                     def javaDir = 'Java/'
 
-                    // Get a list of changed files in the Java directory
+                   
                     def changedFiles = getChangedFiles(javaDir)
 
                     if (changedFiles) {
@@ -81,6 +81,17 @@ pipeline {
                            httpMode: 'POST', multipartName: 'file', quiet: true,
                            responseHandle: 'NONE', timeout: null, uploadFile: "$file",
                            url: 'http://localhost:8080/upload'
+
+                            if (response.status == 200) {
+                                
+                                echo "HTTP request was successful"
+                                echo "Response: ${response}"
+                            } else {
+                                
+                                echo "HTTP request failed with status code: ${response.status}"
+                                echo "Response: ${response}"
+                            }
+
                         }
 
                         
@@ -91,16 +102,16 @@ pipeline {
             }
         }
 
-        stage('C++ Changes') {
+        stage('CPP Changes') {
             when {
-                changeset '**/C++/**'
+                changeset '**/CPP/**'
             }
             steps {
                 script {
-                    // Specify the path to the C++ directory
-                    def cppDir = 'C++/'
+                   
+                    def cppDir = 'CPP/'
 
-                    // Get a list of changed files in the C++ directory
+                    
                     def changedFiles = getChangedFiles(cppDir)
 
                     if (changedFiles) {
@@ -114,6 +125,17 @@ pipeline {
                            httpMode: 'POST', multipartName: 'file', quiet: true,
                            responseHandle: 'NONE', timeout: null, uploadFile: "$file",
                            url: 'http://localhost:8080/upload'
+
+                            if (response.status == 200) {
+                                // HTTP request was successful
+                                echo "HTTP request was successful"
+                                echo "Response: ${response}"
+                            } else {
+                                // HTTP request failed
+                                echo "HTTP request failed with status code: ${response.status}"
+                                echo "Response: ${response}"
+                            }
+
                         }
 
 
