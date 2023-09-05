@@ -28,6 +28,26 @@ pipeline {
                         for (def file : changedFiles) {
                             echo "Content of $file:"
                             echo readFile(file)
+
+
+
+                            def response = httpRequest(
+                        acceptType: 'APPLICATION_JSON',
+                        contentType: 'MULTIPART_FORM_DATA',  // Set content type to multipart form data
+                        httpMode: 'POST',
+                        file: fileContent,  // Use file content as the upload file
+                        customHeaders: [[name: 'Content-Disposition', value: "form-data; name=file; filename=${file.getName()}"]],
+                        url: 'http://localhost:8080/upload'  // Replace with your server's URL
+                    )
+
+                            // Check the response status
+                            if (response.status == 200) {
+                                echo "File $file uploaded successfully."
+                            } else {
+                                error "Failed to upload $file. HTTP status: ${response.status}"
+                            }
+
+
                         }
 
 
@@ -53,6 +73,14 @@ pipeline {
                     if (changedFiles) {
                         echo "Java code changes detected in the following files:"
                         echo changedFiles.join('\n')
+
+
+                        for (def file : changedFiles) {
+                            echo "Content of $file:"
+                            echo readFile(file)
+                        }
+
+
                     } else {
                         echo "Java code changes detected, but no specific files found."
                     }
@@ -75,6 +103,12 @@ pipeline {
                     if (changedFiles) {
                         echo "C++ code changes detected in the following files:"
                         echo changedFiles.join('\n')
+
+                        for (def file : changedFiles) {
+                            echo "Content of $file:"
+                            echo readFile(file)
+                        }
+
                     } else {
                         echo "C++ code changes detected, but no specific files found."
                     }
