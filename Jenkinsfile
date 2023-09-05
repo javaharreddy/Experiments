@@ -127,11 +127,11 @@ pipeline {
                            url: 'http://localhost:8080/upload'
 
                             if (response.status == 200) {
-                                // HTTP request was successful
+                               
                                 echo "HTTP request was successful"
                                 echo "Response: ${response}"
                             } else {
-                                // HTTP request failed
+                              
                                 echo "HTTP request failed with status code: ${response.status}"
                                 echo "Response: ${response}"
                             }
@@ -146,7 +146,7 @@ pipeline {
             }
         }
 
-        // Add more stages for other languages or actions as needed
+        
     }
 }
 
@@ -155,7 +155,7 @@ List<String> getChangedFiles(String directory) {
     def changedFiles = []
     for (changeLogSet in currentBuild.changeSets) {
         for (entry in changeLogSet.getItems()) {
-            // Check if the changed file is within the specified directory
+          
             if (entry.affectedPaths.any { it.startsWith(directory) }) {
                 changedFiles.addAll(entry.affectedPaths)
             }
