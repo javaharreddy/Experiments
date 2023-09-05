@@ -107,5 +107,17 @@ String isNewOrModified(String file, String directory) {
     def gitCommand = "git log --name-status -n 1 -- \"$file\""
     def commandOutput = bat(script: "cd \"$directory\" && $gitCommand", returnStdout: true).trim()
 
-    return commandOutput.startsWith("A") ? "New File" : "Modified File"
+    // Split the command output into lines and check for the presence of the file name
+    def lines = commandOutput.readLines()
+    def fileStatus = "Modified File"
+
+    for (line in lines) {
+        if (line.endsWith("\t$file")) {
+            fileStatus = "New File"
+            break
+        }
+    }
+
+    return fileStatus
 }
+
