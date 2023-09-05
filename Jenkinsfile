@@ -31,6 +31,7 @@ pipeline {
 
                             echo "Content of $file:"
                             echo readFile(file)
+                        /*
                             def response = httpRequest acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_OCTETSTREAM',
                            httpMode: 'POST', multipartName: 'file', quiet: true,
                            responseHandle: 'NONE', timeout: null, uploadFile: "$file",
@@ -45,7 +46,7 @@ pipeline {
                                 echo "HTTP request failed with status code: ${response.status}"
                                 echo "Response: ${response}"
                             }
-
+                            */
 
                         }
 
@@ -75,8 +76,10 @@ pipeline {
 
 
                         for (def file : changedFiles) {
+
                             echo "Content of $file:"
                             echo readFile(file)
+                        /*
                             def response = httpRequest acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_OCTETSTREAM',
                            httpMode: 'POST', multipartName: 'file', quiet: true,
                            responseHandle: 'NONE', timeout: null, uploadFile: "$file",
@@ -91,6 +94,7 @@ pipeline {
                                 echo "HTTP request failed with status code: ${response.status}"
                                 echo "Response: ${response}"
                             }
+                        */
 
                         }
 
@@ -121,6 +125,7 @@ pipeline {
                         for (def file : changedFiles) {
                             echo "Content of $file:"
                             echo readFile(file)
+                        /*
                             def response = httpRequest acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_OCTETSTREAM',
                            httpMode: 'POST', multipartName: 'file', quiet: true,
                            responseHandle: 'NONE', timeout: null, uploadFile: "$file",
@@ -135,6 +140,7 @@ pipeline {
                                 echo "HTTP request failed with status code: ${response.status}"
                                 echo "Response: ${response}"
                             }
+                        */
 
                         }
 
