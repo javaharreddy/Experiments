@@ -30,7 +30,7 @@ pipeline {
                             echo readFile(file)
                             def response = httpRequest acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_OCTETSTREAM',
                            httpMode: 'POST', multipartName: 'file', quiet: true,
-                           responseHandle: 'NONE', timeout: null, file: "$file",
+                           responseHandle: 'NONE', timeout: null, uploadFile: "$file",
                            url: 'http://localhost:8080/upload'
                         }
 
