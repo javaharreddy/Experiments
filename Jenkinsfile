@@ -27,6 +27,7 @@ pipeline {
 
                         for (def file : changedFiles) {
                             def fileStatus = isNewOrModified(file, pythonDir)
+                            echo "$fileStatus"
                             echo "File $fileStatus: $file"
                             echo "Content of $file:"
                             echo readFile(file)
