@@ -104,18 +104,13 @@ List<String> getChangedFiles(String directory) {
 }
 @NonCPS
 String isNewOrModified(String file, String directory) {
-    // Define a variable to track the file status
-    def fileStatus = "Modified File"
-    
-    // Use the 'checkout' step to retrieve the file's history
-    checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'PathRestriction', excludedRegions: '', includedRegions: file]], submoduleCfg: [], userRemoteConfigs: [[url: "$directory"]]])
-    
-    // Check if the file has any change in the 'main' branch
-    if (fileExists(file)) {
-        fileStatus = "New File"
+    // Check if the file exists in the workspace directory
+    def filePath = "${directory}/${file}"
+    if (fileExists(filePath)) {
+        return "1" // Modified File
+    } else {
+        return "2" // New File
     }
-    
-    return fileStatus
 }
 
 
