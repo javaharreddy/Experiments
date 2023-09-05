@@ -29,8 +29,10 @@ pipeline {
                         for (def file : changedFiles) {
 
 
-                            echo "Content of $file:"
-                            echo readFile(file)
+                            if (file.contains("/Test")) {
+                                echo "Content of $file:"
+                                echo readFile(file)
+                            }
                         /*
                             def response = httpRequest acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_OCTETSTREAM',
                            httpMode: 'POST', multipartName: 'file', quiet: true,
