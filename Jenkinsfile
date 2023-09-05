@@ -31,47 +31,64 @@ pipeline {
             }
         }
 
-        // Add stages for Java and C++ changes if needed
-    }
-}
+        stage('Java Changes') {
+            when {
+                changeset '**/Java/**'
+            }
+            steps {
+                script {
+                    // Specify the path to the Java directory
+                    def javaDir = 'Java/'
 
-// Function to get a list of changed files in a directory
-def getChangedFiles(directory) {
-    try {
-        def gitCommand = "git diff --name-only origin/main HEAD | findstr /R \"^${directory}\""
-        def result = bat(script: gitCommand, returnStatus: true, returnStdout: true).trim()
-        
-        if (result) {
-            return result.tokenize('\n')
-        } else {
-            // If no changes were found in the top-level directory, check subdirectories
-            def subdirectories = findSubdirectories(directory)
-            def subdirectoryChanges = [:]
+                    // Get a list of changed files in the Java directory
+                    def changedFiles = getChangedFiles(javaDir)
 
-            for (subdir in subdirectories) {
-                def subdirPath = "${directory}${subdir}/"
-                def subResult = bat(script: "git diff --name-only origin/main HEAD | findstr /R \"^${subdirPath}\"", returnStatus: true, returnStdout: true).trim()
-                if (subResult) {
-                    subdirectoryChanges[subdirPath] = subResult.tokenize('\n')
+                    if (changedFiles) {
+                        echo "Java code changes detected in the following files:"
+                        echo changedFiles.join('\n')
+                    } else {
+                        echo "Java code changes detected, but no specific files found."
+                    }
                 }
             }
-
-            return subdirectoryChanges
         }
-    } catch (Exception ex) {
-        return null
+
+        stage('C++ Changes') {
+            when {
+                changeset '**/C++/**'
+            }
+            steps {
+                script {
+                    // Specify the path to the C++ directory
+                    def cppDir = 'C++/'
+
+                    // Get a list of changed files in the C++ directory
+                    def changedFiles = getChangedFiles(cppDir)
+
+                    if (changedFiles) {
+                        echo "C++ code changes detected in the following files:"
+                        echo changedFiles.join('\n')
+                    } else {
+                        echo "C++ code changes detected, but no specific files found."
+                    }
+                }
+            }
+        }
+
+        // Add more stages for other languages or actions as needed
     }
 }
 
-def findSubdirectories(directory) {
-    def subdirectories = []
-    def cmd = "dir /b /ad \"${directory}*\""
-    def subdirList = bat(script: cmd, returnStatus: true, returnStdout: true).trim()
-    
-    subdirList.eachLine { subdir ->
-        subdirectories.add(subdir)
+@NonCPS
+List<String> getChangedFiles(String directory) {
+    def changedFiles = []
+    for (changeLogSet in currentBuild.changeSets) {
+        for (entry in changeLogSet.getItems()) {
+            // Check if the changed file is within the specified directory
+            if (entry.affectedPaths.any { it.startsWith(directory) }) {
+                changedFiles.addAll(entry.affectedPaths)
+            }
+        }
     }
-    
-    return subdirectories
+    return changedFiles
 }
-
