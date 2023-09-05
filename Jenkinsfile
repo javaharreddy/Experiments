@@ -29,7 +29,7 @@ pipeline {
                         for (def file : changedFiles) {
 
                             if (file.contains("/Test")) {
-                                def result = bat(script: "python ${pythonScript}", returnStatus: true)
+                                def result = bat(script: "python $file", returnStatus: true)
                                 if (result == 0) {
                             echo "Success: Python script executed successfully."
                             } else {
