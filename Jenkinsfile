@@ -26,11 +26,13 @@ pipeline {
                         echo changedFiles.join('\n')
 
                         for (def file : changedFiles) {
+                            def fileStatus = isNewOrModified(file, pythonDir)
+                            echo "File $fileStatus: $file"
                             echo "Content of $file:"
                             echo readFile(file)
                         }
 
-                        
+
                     } else {
                         echo "Python code changes detected, but no specific files found."
                     }
@@ -98,4 +100,11 @@ List<String> getChangedFiles(String directory) {
         }
     }
     return changedFiles
+}
+@NonCPS
+String isNewOrModified(String file, String directory) {
+    def gitCommand = "git log --name-status -n 1 -- \"$file\""
+    def commandOutput = bat(script: "cd \"$directory\" && $gitCommand", returnStdout: true).trim()
+
+    return commandOutput.startsWith("A") ? "New File" : "Modified File"
 }
