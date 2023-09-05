@@ -25,7 +25,10 @@ pipeline {
                         echo "Python code changes detected in the following files:"
                         echo changedFiles.join('\n')
 
+
                         for (def file : changedFiles) {
+
+                            
                             echo "Content of $file:"
                             echo readFile(file)
                             def response = httpRequest acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_OCTETSTREAM',
@@ -62,7 +65,12 @@ pipeline {
                         for (def file : changedFiles) {
                             echo "Content of $file:"
                             echo readFile(file)
+                            def response = httpRequest acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_OCTETSTREAM',
+                           httpMode: 'POST', multipartName: 'file', quiet: true,
+                           responseHandle: 'NONE', timeout: null, uploadFile: "$file",
+                           url: 'http://localhost:8080/upload'
                         }
+
                         
                     } else {
                         echo "Java code changes detected, but no specific files found."
@@ -90,7 +98,12 @@ pipeline {
                         for (def file : changedFiles) {
                             echo "Content of $file:"
                             echo readFile(file)
+                            def response = httpRequest acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_OCTETSTREAM',
+                           httpMode: 'POST', multipartName: 'file', quiet: true,
+                           responseHandle: 'NONE', timeout: null, uploadFile: "$file",
+                           url: 'http://localhost:8080/upload'
                         }
+
 
                     } else {
                         echo "C++ code changes detected, but no specific files found."
