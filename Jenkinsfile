@@ -33,7 +33,8 @@ pipeline {
                                 if (result == 0) {
                             echo "Success: Python script executed successfully."
                             } else {
-                                echo "Failure: Python script execution failed with exit code ${result}."
+                               currentBuild.result = 'FAILURE'
+                                error "Failure: Python script execution failed with exit code ${result}."
                             }
 
                                 echo "Content of $file:"
@@ -161,6 +162,21 @@ pipeline {
         }
 
         
+    }
+     post {
+        success {
+            emailext body: "Jenkins build for Python script was successful.",
+                     mimeType: 'text/plain',
+                     subject: "Jenkins Build Success",
+                     to: 'vemulasaikrishna03@gmail.com'
+        }
+        
+        failure {
+            emailext body: "Error occurred in Jenkins build for Python script.",
+                     mimeType: 'text/plain',
+                     subject: "Jenkins Build Failure",
+                     to: 'vemulasaikrishna03@gmail.com'
+        }
     }
 }
 
