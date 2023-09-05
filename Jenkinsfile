@@ -26,7 +26,8 @@ pipeline {
                         echo changedFiles.join('\n')
 
                         for (def file : changedFiles) {
-                            echo "Content of $file:"
+                            def fileContent = readFile(file)
+                            echo fileContent
                             echo readFile(file)
 
 
