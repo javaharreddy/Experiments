@@ -25,10 +25,10 @@ pipeline {
                         echo "Python code changes detected in the following files:"
                         echo changedFiles.join('\n')
 
-                        or (def file : changedFiles) {
-                            def fileStatus = isNewOrModified(file)
-                            echo "File Status: $fileStatus"
-                            echo "File: $file"
+                        for (def file : changedFiles) {
+                            def fileStatus = isNewOrModified(file, pythonDir)
+                            echo "$fileStatus"
+                            echo "File $fileStatus: $file"
                             echo "Content of $file:"
                             echo readFile(file)
                         }
@@ -103,9 +103,10 @@ List<String> getChangedFiles(String directory) {
     return changedFiles
 }
 @NonCPS
-String isNewOrModified(String file) {
+String isNewOrModified(String file, String directory) {
     // Check if the file exists in the workspace directory
-    if (fileExists(file)) {
+    def filePath = "${directory}/${file}"
+    if (fileExists(filePath)) {
         return "1" // Modified File
     } else {
         return "2" // New File
