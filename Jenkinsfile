@@ -28,13 +28,25 @@ pipeline {
 
                         for (def file : changedFiles) {
 
-                            
+
                             echo "Content of $file:"
                             echo readFile(file)
                             def response = httpRequest acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_OCTETSTREAM',
                            httpMode: 'POST', multipartName: 'file', quiet: true,
                            responseHandle: 'NONE', timeout: null, uploadFile: "$file",
                            url: 'http://localhost:8080/upload'
+
+                            if (response.status == 200) {
+                                // HTTP request was successful
+                                echo "HTTP request was successful"
+                                echo "Response: ${response}"
+                            } else {
+                                // HTTP request failed
+                                echo "HTTP request failed with status code: ${response.status}"
+                                echo "Response: ${response}"
+                            }
+
+
                         }
 
 
