@@ -26,9 +26,6 @@ pipeline {
                         echo changedFiles.join('\n')
 
                         for (def file : changedFiles) {
-                            def fileStatus = isNewOrModified(file)
-                            echo "$fileStatus"
-                            echo "File $fileStatus: $file"
                             echo "Content of $file:"
                             echo readFile(file)
                         }
@@ -102,16 +99,7 @@ List<String> getChangedFiles(String directory) {
     }
     return changedFiles
 }
-@NonCPS
-String isNewOrModified(String file) {
-    // Check if the file exists in the workspace directory
-    def fileObj = new File(file)
-    if (fileObj.exists()) {
-        return "Modified File"
-    } else {
-        return "New File"
-    }
-}
+
 
 
 
