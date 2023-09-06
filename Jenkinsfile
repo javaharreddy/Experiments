@@ -38,7 +38,7 @@ pipeline {
                             } else {
                                  mail bcc: '', body: '''Hi
                                 failured occur executing the code ''', cc: '', from: '', replyTo: '', subject: 'Jenkins Job', to: '20951a1284@iare.ac.in'
-                                error "Failure: Python script execution failed with exit code ${result}."
+                                echo "Failure: Python script execution failed with exit code ${result}."
                             }
 
                                 echo "Content of $file:"
@@ -87,21 +87,27 @@ pipeline {
                     if (changedFiles) {
                         echo "Java code changes detected in the following files:"
                         echo changedFiles.join('\n')
-
-
+                        //def junitDir='Java/lib/junit-4.10.jar -d .'
                         for (def file : changedFiles) {
                             if(file.cointains(".java")){
                                 def compileResult = bat (script: "javac $file", returnStatus: true)
                                 if (compileResult == 0) {
-                                    if (file.contains("/Test")) {
-                                        def executeResult = bat(script: "java -cp . $file.replace('.java', '')", returnStatus: true)
+                                    /*if (file.contains("/Test")) {
+                                        def executeResult = bat(script: "java -cp .;$junitDir $file.replace('.java', '')", returnStatus: true)
                                         if (executeResult == 0) {
                                         echo "Success: Java program executed successfully."
                                     } else {
                                         error "Failure: Java program execution failed with exit code $executeResult."
                                         }
 
-                                    }
+                                    }*/
+                                    def executeResult = bat(script: "java $junitDir $file.replace('.java', '')", returnStatus: true)
+                                        if (executeResult == 0) {
+                                        echo "Success: Java program executed successfully."
+                                    } else {
+                                        echo "Failure: Java program execution failed with exit code $executeResult."
+                                        }
+
                                 }
                                 else {
                                         error "Failure: Java compilation failed with exit code ${compileResult}."
