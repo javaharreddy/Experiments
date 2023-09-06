@@ -1,7 +1,5 @@
 package Experiments.Java;
 
-
-
 public class Example {
     public static void main(String[] args) {
         // Define two numbers to be added

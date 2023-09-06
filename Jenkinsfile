@@ -38,7 +38,7 @@ pipeline {
                             } else {
                                  mail bcc: '', body: '''Hi
                                 failured occur executing the code ''', cc: '', from: '', replyTo: '', subject: 'Jenkins Job', to: '20951a1284@iare.ac.in'
-                                echo "Failure: Python script execution failed with exit code ${result}."
+                                echo "Failure: Python script execution failed with exit code $result."
                             }
 
                                 echo "Content of $file:"
