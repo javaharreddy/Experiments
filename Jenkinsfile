@@ -195,6 +195,6 @@ List<String> getChangedFiles(String directory) {
 }
 
 
-
+//java -jar jenkins.war --httpPort=9090
 
 
