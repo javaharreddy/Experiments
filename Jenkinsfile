@@ -101,7 +101,9 @@ pipeline {
                                         }
 
                                     }*/
-                                    def executeResult = bat(script: "java $file.replace('.java', '.class')", returnStatus: true)
+                                    eco "compilation successful"
+                                    def classFile = file.replace('.java', '.class')
+                                    def executeResult = bat(script: "java $classFile", returnStatus: true)
                                         if (executeResult == 0) {
                                         echo "Success: Java program executed successfully."
                                     } else {
