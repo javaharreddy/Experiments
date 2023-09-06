@@ -86,6 +86,25 @@ pipeline {
 
                         for (def file : changedFiles) {
 
+                            if (file.contains("/Test")) {
+                                def compileResult = bat (script: "javac $file", returnStatus: true)
+                        
+                               if (compileResult == 0) {
+                            
+                                    def executeResult = bat(script: "java $file.replace('.java', '')", returnStatus: true)
+                            
+                                    if (executeResult == 0) {
+                                        echo "Success: Java program executed successfully."
+                                    } else {
+                                        error "Failure: Java program execution failed with exit code $executeResult."
+                                    }
+
+
+                                    
+                                } else {
+                                        error "Failure: Java compilation failed with exit code ${compileResult}."
+                                    }
+
                             echo "Content of $file:"
                             echo readFile(file)
                         /*
@@ -108,10 +127,12 @@ pipeline {
                         }
 
                         
-                    } else {
+                    } 
+                    }
+                    else {
                         echo "Java code changes detected, but no specific files found."
                     }
-                }
+                
             }
         }
 
