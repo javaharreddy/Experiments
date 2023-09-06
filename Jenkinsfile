@@ -90,7 +90,7 @@ pipeline {
                         //def junitDir='Java/lib/junit-4.10.jar -d .'
                         for (def file : changedFiles) {
                             if(file.cointains(".java")){
-                                def compileResult = bat (script: "javac -cp .;$file", returnStatus: true)
+                                def compileResult = bat (script: "javac $file", returnStatus: true)
                                 if (compileResult == 0) {
                                     /*if (file.contains("/Test")) {
                                         def executeResult = bat(script: "java -cp .;$junitDir $file.replace('.java', '')", returnStatus: true)
@@ -101,7 +101,7 @@ pipeline {
                                         }
 
                                     }*/
-                                    def executeResult = bat(script: "java -cp .;$file.replace('.java', '.class')", returnStatus: true)
+                                    def executeResult = bat(script: "java $file.replace('.java', '.class')", returnStatus: true)
                                         if (executeResult == 0) {
                                         echo "Success: Java program executed successfully."
                                     } else {
