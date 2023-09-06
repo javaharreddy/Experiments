@@ -90,6 +90,7 @@ pipeline {
                         //def junitDir='Java/lib/junit-4.10.jar -d .'
                         for (def file : changedFiles) {
                             if(file.cointains(".java")){
+                                echo"in the java"
                                 def compileResult = bat (script: "javac $file", returnStatus: true)
                                 if (compileResult == 0) {
                                     /*if (file.contains("/Test")) {
