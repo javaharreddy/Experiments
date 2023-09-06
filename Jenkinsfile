@@ -91,6 +91,7 @@ pipeline {
                         for (def file : changedFiles) {
                                 echo"in the java"
                                 def compileResult = bat (script: "javac $file", returnStatus: true)
+                                eco "java is compiled"
                                 if (compileResult == 0) {
                                     /*if (file.contains("/Test")) {
                                         def executeResult = bat(script: "java -cp .;$junitDir $file.replace('.java', '')", returnStatus: true)
