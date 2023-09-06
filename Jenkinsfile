@@ -101,7 +101,7 @@ pipeline {
                                         }
 
                                     }*/
-                                    def executeResult = bat(script: "java $junitDir $file.replace('.java', '')", returnStatus: true)
+                                    def executeResult = bat(script: "java -cp .;$file.replace('.java', '.class')", returnStatus: true)
                                         if (executeResult == 0) {
                                         echo "Success: Java program executed successfully."
                                     } else {
@@ -211,6 +211,6 @@ List<String> getChangedFiles(String directory) {
 }
 
 
-//java -jar jenkins.war --httpPort=9090
+//java -jar jenkins.war --httpPort=9191
 
 
