@@ -60,7 +60,8 @@ pipeline {
                         }
 
 
-                    } else {
+                    } 
+                    else {
                         echo "Python code changes detected, but no specific files found."
                     }
                 }
@@ -185,17 +186,15 @@ pipeline {
     }
      post {
         success {
-            emailext body: "Jenkins build for Python script was successful.",
-                     mimeType: 'text/plain',
-                     subject: "Jenkins Build Success",
-                     to: 'vemulasaikrishna03@gmail.com'
+            mail bcc: '', body: '''Hi
+            Successfully executed the code and tested ''', cc: '', from: '', replyTo: '', subject: 'Jenkins Job', to: '20951a1284@iare.ac.in'
+            
         }
         
         failure {
-            emailext body: "Error occurred in Jenkins build for Python script.",
-                     mimeType: 'text/plain',
-                     subject: "Jenkins Build Failure",
-                     to: 'vemulasaikrishna03@gmail.com'
+            mail bcc: '', body: '''Hi
+            failured occur executing the code ''', cc: '', from: '', replyTo: '', subject: 'Jenkins Job', to: '20951a1284@iare.ac.in'
+           
         }
     }
 }
