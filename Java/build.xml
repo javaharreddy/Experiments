@@ -1,9 +1,9 @@
 <project name="MyJavaProject" default="compile-and-test">
 
     <!-- Define properties -->
-    <property name="src.dir" location="Java/src"/>
-    <property name="test.dir" location="Java/test"/>
-    <property name="build.dir" location="Java/build"/>
+    <property name="src.dir" location="src"/>
+    <property name="test.dir" location="test"/>
+    <property name="build.dir" location="build"/>
     <property name="junit.report.dir" location="junit-reports"/>
 
     <!-- Clean target: Remove previously compiled files -->
