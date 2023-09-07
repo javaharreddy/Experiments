@@ -93,7 +93,7 @@ pipeline {
                             echo"in the java"
                             def className = file.replaceAll('.*/(.*).java', '$1')
                             def buildpath='Java/build.xml'
-                            bat "ant -f build.xml -Djava.file=$file compile"
+                            bat "ant -f $buildpath -Djava.file=$file compile"
                    
                             bat "ant -f $buildpath -Djava.file=$className run"
                            
