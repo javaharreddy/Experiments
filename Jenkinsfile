@@ -84,7 +84,7 @@ pipeline {
                   
                     def javaDir = 'Java/'
                     def srcDir = "src/com"
-                    def testDir = "Java/test/com"
+                    def testDir = "/test/com"
                     def buildDir = "Java/build"
 
                     //bat "rd /s /q $buildDir"
