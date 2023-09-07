@@ -1,13 +1,15 @@
-<project name="MyJavaProject" default="compile-and-run">
+<project name="MyJavaProject" default="compile-and-test">
 
     <!-- Define properties -->
-    <property name="src.dir" location="src"/>
-    <property name="build.dir" location="build"/>
-    <property name="main.class" value=""/>
+    <property name="src.dir" location="Java/src"/>
+    <property name="test.dir" location="Java/test"/>
+    <property name="build.dir" location="Java/build"/>
+    <property name="junit.report.dir" location="junit-reports"/>
 
     <!-- Clean target: Remove previously compiled files -->
     <target name="clean">
         <delete dir="${build.dir}"/>
+        <delete dir="${junit.report.dir}"/>
     </target>
 
     <!-- Compile target: Compile Java source files -->
@@ -16,14 +18,26 @@
         <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false"/>
     </target>
 
-    <!-- Run target: Execute a Java class -->
-    <target name="run" depends="compile">
-        <java classname="${main.class}" classpath="${build.dir}" fork="true"/>
+    <!-- Test target: Execute JUnit tests -->
+    <target name="test" depends="compile">
+        <mkdir dir="${junit.report.dir}"/>
+        <junit printsummary="on" fork="true">
+            <classpath>
+                <path location="${build.dir}"/>
+                <path location="${test.dir}"/>
+            </classpath>
+            <formatter type="xml"/>
+            <batchtest todir="${junit.report.dir}">
+                <fileset dir="${test.dir}">
+                    <include name="**/*Test.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
     </target>
 
-    <!-- Main target: Compile and run the specified Java file -->
-    <target name="compile-and-run" depends="run">
-        <echo message="Compiling and running ${main.class}"/>
+    <!-- Main target: Compile and test Java code -->
+    <target name="compile-and-test" depends="test">
+        <echo message="Java code compiled and tested successfully!"/>
     </target>
 
 </project>

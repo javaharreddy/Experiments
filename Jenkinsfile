@@ -83,8 +83,14 @@ pipeline {
                 script {
                   
                     def javaDir = 'Java/'
-                   
-                    def changedFiles = getChangedFiles(javaDir)
+                    def srcDir = "Java/src"
+                    def testDir = "Java/test"
+                    def buildDir = "Java/build"
+
+                    bat "rmdir /s /q $buildDir"
+
+                    def changedFiles = getChangedFiles(srcDir)
+                    def testFiles = getChangedFiles(testDir)
 
                     if (changedFiles) {
                         echo "Java code changes detected in the following files:"
@@ -97,6 +103,7 @@ pipeline {
                                 bat "ant -f $buildpath -Djava.file=$file -Dmain.class=$className compile"
                                 bat "ant -f $buildpath -Djava.file=$className -Dmain.class=$className run"
                                 echo "Java code in $file executed successfully."
+                                mail bcc: '', body: "Successfully Executed the $file", subject: 'Jenkins Job', to: '20951a1284@iare.ac.in'
 
                             } catch (Exception e) {
                                
@@ -108,7 +115,25 @@ pipeline {
                     }
                     else {
                         echo "Java code changes detected, but no specific files found."
-                    }                  
+                    }
+                    if (testFiles) {
+                        echo "JUnit test changes detected in the following files:"
+                        echo testFiles.join('\n')
+                        for (def testFile : testFiles) {
+                            def buildpath = "Java/build.xml"
+                            try {
+                                bat "ant -f $buildpath -Dsrc.dir=$srcDir -Dtest.dir=$testDir -Dbuild.dir=$buildDir test"
+                                echo "JUnit tests in $testFile executed successfully."
+                                mail bcc: '', body: "Successfully Executed $testFile", subject: 'Jenkins Job', to: '20951a1284@iare.ac.in'
+
+                            } catch (Exception e) {
+                                echo "Error in $testFile: $e.getMessage()"
+                                mail bcc: '', body: "Error in $testFile: $e.getMessage()", subject: 'Jenkins Job', to: '20951a1284@iare.ac.in'
+                            }
+                        }
+                    } else {
+                        echo "JUnit test changes detected, but no specific files found."
+                    }                
                         /*
                             def response = httpRequest acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_OCTETSTREAM',
                            httpMode: 'POST', multipartName: 'file', quiet: true,
