@@ -124,7 +124,7 @@ pipeline {
                             def buildpath = "Java/build.xml"
                             try {
                                 echo "$srcDir"
-                                bat "ant -f $buildpath -Dbuild.dir=$buildDir -Dsrc.dir=$srcDir -Dtest.dir=$testDir test"
+                                bat "ant -f $buildpath -Dbuild.dir=$buildDir -Dsrc.dir=src/com -Dtest.dir=test/com test"
                                 echo "JUnit tests in $testFile executed successfully."
                                 mail bcc: '', body: "Successfully Executed $testFile", subject: 'Jenkins Job', to: '20951a1284@iare.ac.in'
 
