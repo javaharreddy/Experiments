@@ -92,10 +92,10 @@ pipeline {
                         for (def file : changedFiles) {
                             echo"in the java"
                             def className = file.replaceAll('.*/(.*).java', '$1')
-                   
+                            def buildpath='Java/build.xml'
                             bat "ant -f build.xml -Djava.file=$file compile"
                    
-                            bat "ant -f build.xml -Djava.file=$className run"
+                            bat "ant -f $buildpath -Djava.file=$className run"
                            
                             echo readFile(file)
                         }
