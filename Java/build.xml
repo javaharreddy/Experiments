@@ -1,15 +1,29 @@
-<project>
-    <property name="test.file" value="default_test_file.xml"/>
+<project name="MyJavaProject" default="compile-and-run">
 
-    <target name="build">
-        <!-- Your build tasks here -->
-        
-        <!-- Run tests using the dynamically determined test file -->
-        <junit>
-            <batchtest fork="yes" todir="${test.reports.dir}">
-                <fileset dir="Test" includes="${test.file}"/>
-            </batchtest>
-            <formatter type="xml"/>
-        </junit>
+    <!-- Define properties -->
+    <property name="src.dir" location="java"/>
+    <property name="build.dir" location="build"/>
+    <property name="main.class" value=""/>
+
+    <!-- Clean target: Remove previously compiled files -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
     </target>
+
+    <!-- Compile target: Compile Java source files -->
+    <target name="compile" depends="clean">
+        <mkdir dir="${build.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false"/>
+    </target>
+
+    <!-- Run target: Execute a Java class -->
+    <target name="run" depends="compile">
+        <java classname="${main.class}" classpath="${build.dir}" fork="true"/>
+    </target>
+
+    <!-- Main target: Compile and run the specified Java file -->
+    <target name="compile-and-run" depends="run">
+        <echo message="Compiling and running ${main.class}"/>
+    </target>
+
 </project>
