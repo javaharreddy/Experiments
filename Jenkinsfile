@@ -103,7 +103,8 @@ pipeline {
                                 bat "ant -f $buildpath -Djava.file=$file -Dmain.class=$className compile"
                                 bat "ant -f $buildpath -Djava.file=$className -Dmain.class=$className run"
                                 echo "Java code in $file executed successfully."
-                                mail bcc: '', body: "Successfully Executed the $file", subject: 'Jenkins Job', to: '20951a1284@iare.ac.in'
+                                mail bcc: '', body: '''Hi
+                                Successfully executed the code and tested the java ''', cc: '', from: '', replyTo: '', subject: 'Jenkins Job', to: '20951a1284@iare.ac.in'
 
                             } catch (Exception e) {
                                
