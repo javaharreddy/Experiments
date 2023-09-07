@@ -80,43 +80,15 @@ pipeline {
                 script {
                   
                     def javaDir = 'Java/'
-
                    
                     def changedFiles = getChangedFiles(javaDir)
 
                     if (changedFiles) {
                         echo "Java code changes detected in the following files:"
                         echo changedFiles.join('\n')
-                        //def junitDir='Java/lib/junit-4.10.jar -d .'
                         for (def file : changedFiles) {
-                                echo"in the java"
-                                def compileResult = bat (script: "javac $file", returnStatus: true)
-                                eco "java is compiled"
-                                if (compileResult == 0) {
-                                    /*if (file.contains("/Test")) {
-                                        def executeResult = bat(script: "java -cp .;$junitDir $file.replace('.java', '')", returnStatus: true)
-                                        if (executeResult == 0) {
-                                        echo "Success: Java program executed successfully."
-                                    } else {
-                                        error "Failure: Java program execution failed with exit code $executeResult."
-                                        }
-
-                                    }*/
-                                    eco "compilation successful"
-                                    def classFile = file.replace('.java', '.class')
-                                    def executeResult = bat(script: "java $classFile", returnStatus: true)
-                                        if (executeResult == 0) {
-                                        echo "Success: Java program executed successfully."
-                                    } else {
-                                        echo "Failure: Java program execution failed with exit code $executeResult."
-                                        }
-
-                                }
-                                else {
-                                        error "Failure: Java compilation failed with exit code ${compileResult}."
-                                }
-
-                          
+                            echo"in the java"
+                            sh "ant -Dtest.file=$file build"
                             echo "Content of $file:"
                             echo readFile(file)
                         }

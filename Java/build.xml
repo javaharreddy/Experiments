@@ -1,0 +1,15 @@
+<project>
+    <property name="test.file" value="default_test_file.xml"/>
+
+    <target name="build">
+        <!-- Your build tasks here -->
+        
+        <!-- Run tests using the dynamically determined test file -->
+        <junit>
+            <batchtest fork="yes" todir="${test.reports.dir}">
+                <fileset dir="Test" includes="${test.file}"/>
+            </batchtest>
+            <formatter type="xml"/>
+        </junit>
+    </target>
+</project>
