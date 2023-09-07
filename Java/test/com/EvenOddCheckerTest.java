@@ -20,5 +20,5 @@ public class EvenOddCheckerTest {
     public void testIsEvenWithZero() {
         assertTrue(EvenOddChecker.isEven(0));
     }
-    //test
+   
 }
