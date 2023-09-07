@@ -20,17 +20,11 @@ pipeline {
                 script {
                    
                     def pythonDir = 'Python/'
-
-                    
                     def changedFiles = getChangedFiles(pythonDir)
-
                     if (changedFiles) {
                         echo "Python code changes detected in the following files:"
                         echo changedFiles.join('\n')
-
-
                         for (def file : changedFiles) {
-
                             if (file.contains("/Test")) {
                                 def result = bat(script: "python $file", returnStatus: true)
                                 if (result == 0) {
