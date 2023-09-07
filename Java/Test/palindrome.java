@@ -7,7 +7,7 @@ public static boolean isPalindrome(String str) {
         String reversedStr = new StringBuilder(str).reverse().toString();
 
         return str.equals(reversedStr);
-        //gsgs
+       
     }
 
      public static void main(String[] args) {
