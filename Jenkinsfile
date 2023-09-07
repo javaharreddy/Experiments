@@ -90,14 +90,20 @@ pipeline {
                         echo "Java code changes detected in the following files:"
                         echo changedFiles.join('\n')
                         for (def file : changedFiles) {
-                            echo"in the java"
                             def className = file.replaceAll('.*/(.*).java', '$1')
-                            def buildpath='Java/build.xml'
-                            bat "ant -f $buildpath -Djava.file=$file compile"
-                   
-                            bat "ant -f $buildpath -Djava.file=$className run"
-                           
-                            echo readFile(file)
+                            def buildpath = 'Java/build.xml'
+                            try {
+                                
+                                bat "ant -f $buildpath -Djava.file=$file compile"
+                                bat "ant -f $buildpath -Djava.file=$className run"
+                                echo "Java code in $file executed successfully."
+
+                            } catch (Exception e) {
+                               
+                                currentBuild.result = 'FAILURE'
+                                echo "Error in $file: $e.getMessage()"
+                                mail bcc: '', body: "Error in $file: $e.getMessage()", subject: 'Jenkins Job', to: '20951a1284@iare.ac.in'
+                            }
                         }
                     }
                     else {
