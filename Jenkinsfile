@@ -87,7 +87,7 @@ pipeline {
                     def testDir = "Java/test"
                     def buildDir = "Java/build"
 
-                    //bat "rd /s /q $buildDir"
+                    bat "rd /s /q $buildDir"
 
                     def changedFiles = getChangedFiles(srcDir)
                     def testFiles = getChangedFiles(testDir)

@@ -17,6 +17,10 @@
         <mkdir dir="${build.dir}"/>
         <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false"/>
     </target>
+    
+    <target name="run" depends="compile">
+    <java classname="${main.class}" classpath="${build.dir}" fork="true"/>
+    </target>
 
     <!-- Test target: Execute JUnit tests -->
     <target name="test" depends="compile">
