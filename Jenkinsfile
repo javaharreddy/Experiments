@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools{
+        ant '1.10.14'
+    }
 
     stages {
         stage('Checkout') {
