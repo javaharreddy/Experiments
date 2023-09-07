@@ -94,8 +94,8 @@ pipeline {
                             def buildpath = 'Java/build.xml'
                             try {
                                 
-                                bat "ant -f $buildpath -Djava.file=$file compile"
-                                bat "ant -f $buildpath -Djava.file=$className run"
+                                bat "ant -f $buildpath -Djava.file=$file -Dmain.class=$className compile"
+                                bat "ant -f $buildpath -Djava.file=$className -Dmain.class=$className run"
                                 echo "Java code in $file executed successfully."
 
                             } catch (Exception e) {
