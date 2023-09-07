@@ -23,21 +23,25 @@
     </target>
 
     <!-- Test target: Execute JUnit tests -->
-    <target name="test" depends="compile">
-        <mkdir dir="${junit.report.dir}"/>
-        <junit printsummary="on" fork="true">
-            <classpath>
-                <path location="${build.dir}"/>
-                <path location="${test.dir}"/>
-            </classpath>
-            <formatter type="xml"/>
-            <batchtest todir="${junit.report.dir}">
-                <fileset dir="${test.dir}">
-                    <include name="**/*Test.java"/>
-                </fileset>
-            </batchtest>
-        </junit>
+   <target name="test" depends="compile">
+    <mkdir dir="${junit.report.dir}"/>
+    <junit printsummary="on" fork="true">
+        <classpath>
+            <!-- Add the JUnit and Hamcrest JAR files to the classpath -->
+            <pathelement location="lib\junit-4.13.2.jar"/>
+            <pathelement location="lib\hamcrest-core-2.2.jar"/>
+            <path location="${build.dir}"/>
+            <path location="${test.dir}"/>
+        </classpath>
+        <formatter type="xml"/>
+        <batchtest todir="${junit.report.dir}">
+            <fileset dir="${test.dir}">
+                <include name="**/*Test.java"/>
+            </fileset>
+        </batchtest>
+    </junit>
     </target>
+
 
     <!-- Main target: Compile and test Java code -->
     <target name="compile-and-test" depends="test">
