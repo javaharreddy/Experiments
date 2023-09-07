@@ -83,8 +83,8 @@ pipeline {
                 script {
                   
                     def javaDir = 'Java/'
-                    def srcDir = "Java/src"
-                    def testDir = "Java/test"
+                    def srcDir = "Java/src/com"
+                    def testDir = "Java/test/com"
                     def buildDir = "Java/build"
 
                     //bat "rd /s /q $buildDir"
@@ -104,7 +104,7 @@ pipeline {
                                 bat "ant -f $buildpath -Djava.file=$className -Dmain.class=$className run"
                                 echo "Java code in $file executed successfully."
                                 mail bcc: '', body: '''Hi
-                                Successfully executed the code and tested the java ''', cc: '', from: '', replyTo: '', subject: 'Jenkins Job', to: '20951a1284@iare.ac.in'
+                                Successfully executed the code java ''', cc: '', from: '', replyTo: '', subject: 'Jenkins Job', to: '20951a1284@iare.ac.in'
 
                             } catch (Exception e) {
                                

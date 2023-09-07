@@ -1,6 +1,9 @@
-package Experiments.Java.test;
+package Experiments.Java.test.com;
 import static org.junit.Assert.*;
 import org.junit.Test;
+
+import com.EvenOddChecker;
+
 
 public class EvenOddCheckerTest {
     @Test
@@ -17,5 +20,5 @@ public class EvenOddCheckerTest {
     public void testIsEvenWithZero() {
         assertTrue(EvenOddChecker.isEven(0));
     }
-    
+    //test
 }

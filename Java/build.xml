@@ -1,8 +1,8 @@
 <project name="MyJavaProject" default="compile-and-test">
 
     <!-- Define properties -->
-    <property name="src.dir" location="src"/>
-    <property name="test.dir" location="test"/>
+    <property name="src.dir" location="src/com"/>
+    <property name="test.dir" location="test/com"/>
     <property name="build.dir" location="build"/>
     <property name="junit.report.dir" location="junit-reports"/>
 
